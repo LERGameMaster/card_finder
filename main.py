@@ -52,6 +52,15 @@ def ask_positions(board):
         print("Coordonnees hors du plateau.\n")
         return ask_positions(board)
 
+    if first == second:
+        print("Il faut deux cases differentes.\n")
+        return ask_positions(board)
+
+    for index in (first, second):
+        if not board.is_selectable(index):
+            print("La case %s est deja trouvee.\n" % board.label(index))
+            return ask_positions(board)
+
     return first, second
 
 

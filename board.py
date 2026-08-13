@@ -100,12 +100,15 @@ class Board(object):
         lines = [self._header()]
         for row in range(self.rows):
             cells = self._row_cells(row)
-            border = " ".join("+-----+" for _ in cells)
+            if row == 0:
+                lines.append(self._border(len(cells)))
             faces = " ".join("|%s|" % card.face() for card in cells)
-            lines.append(" " * MARGIN + border)
             lines.append("%2d  " % (row + 1) + faces)
-            lines.append(" " * MARGIN + border)
+            lines.append(self._border(len(cells)))
         return "\n".join(lines)
+
+    def _border(self, cell_count):
+        return " " * MARGIN + " ".join("+-----+" for _ in range(cell_count))
 
     def _row_cells(self, row):
         start = row * self.columns

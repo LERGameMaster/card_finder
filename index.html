@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card Finder - jeu de memoire</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur entete__inner">
+      <h1 class="logo">Card <span>Finder</span></h1>
+      <p class="accroche">Retrouvez les paires du set Blurness 3</p>
+    </div>
+  </header>
+
+  <main class="conteneur">
+    <section class="barre">
+      <div class="barre__reglages">
+        <label class="reglage">
+          Difficulte
+          <select id="difficulte" class="champ">
+            <option value="facile">Facile - 6 paires</option>
+            <option value="normal" selected>Normal - 10 paires</option>
+            <option value="difficile">Difficile - 18 paires</option>
+          </select>
+        </label>
+        <button type="button" class="bouton bouton--plein" id="nouvelle-partie">Nouvelle partie</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__valeur" id="chrono">00:00</span>
+          <span class="stat__libelle">Chrono</span>
+        </div>
+        <div class="stat">
+          <span class="stat__valeur" id="paires">0 / 10</span>
+          <span class="stat__libelle">Paires</span>
+        </div>
+        <div class="stat">
+          <span class="stat__valeur" id="coups">0</span>
+          <span class="stat__libelle">Coups</span>
+        </div>
+        <div class="stat">
+          <span class="stat__valeur" id="score">0</span>
+          <span class="stat__libelle">Score</span>
+        </div>
+      </div>
+    </section>
+
+    <p class="message" id="message">Cliquez sur deux cartes pour les retourner.</p>
+
+    <section class="plateau" id="plateau"></section>
+  </main>
+
+  <div class="fin" id="fin" hidden>
+    <div class="fin__carte">
+      <h2 id="fin-titre">Partie terminee</h2>
+      <p class="fin__texte" id="fin-texte"></p>
+      <dl class="fin__stats">
+        <div>
+          <dt>Temps</dt>
+          <dd id="fin-temps">-</dd>
+        </div>
+        <div>
+          <dt>Coups</dt>
+          <dd id="fin-coups">-</dd>
+        </div>
+        <div>
+          <dt>Score</dt>
+          <dd id="fin-score">-</dd>
+        </div>
+      </dl>
+      <p class="fin__record" id="fin-record" hidden></p>
+      <button type="button" class="bouton bouton--plein" id="rejouer">Rejouer</button>
+    </div>
+  </div>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <p>Projet personnel - visuels du set Blurness 3 - aucune connexion requise.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

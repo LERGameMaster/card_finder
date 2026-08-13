@@ -22,6 +22,10 @@ const compteurPaires = document.querySelector("#paires");
 const compteurCoups = document.querySelector("#coups");
 const compteurScore = document.querySelector("#score");
 const affichageChrono = document.querySelector("#chrono");
+const panneauFin = document.querySelector("#fin");
+const boutonRejouer = document.querySelector("#rejouer");
+
+const CLE_RECORDS = "card-finder-records";
 
 let niveau = NIVEAUX.normal;
 let cases = [];
@@ -171,6 +175,10 @@ function resoudre() {
     majCompteurs();
     annoncer("Paire trouvee : " + cases[premier].carte.nom, true);
     selection = [];
+
+    if (pairesTrouvees === niveau.paires) {
+      terminerPartie();
+    }
     return;
   }
 
@@ -185,6 +193,54 @@ function resoudre() {
     selection = [];
     plateauBloque = false;
   }, DELAI_RETOUR);
+}
+
+function lireRecords() {
+  try {
+    return JSON.parse(window.localStorage.getItem(CLE_RECORDS)) || {};
+  } catch (erreur) {
+    return {};
+  }
+}
+
+function enregistrerRecord(cle, score) {
+  const records = lireRecords();
+  const ancien = records[cle] || 0;
+  if (score <= ancien) {
+    return false;
+  }
+
+  records[cle] = score;
+  try {
+    window.localStorage.setItem(CLE_RECORDS, JSON.stringify(records));
+  } catch (erreur) {
+    /* stockage indisponible : le record ne survivra pas au rechargement */
+  }
+  return true;
+}
+
+function terminerPartie() {
+  arreterChrono();
+
+  const duree = tempsEcoule();
+  const total = scoreFinal();
+  const cle = selectDifficulte.value;
+  const nouveauRecord = enregistrerRecord(cle, total);
+
+  document.querySelector("#fin-titre").textContent = "Toutes les paires sont trouvees";
+  document.querySelector("#fin-texte").textContent =
+    "Niveau " + niveau.libelle + " - bonus de temps : " + bonusTemps() + " points.";
+  document.querySelector("#fin-temps").textContent = formaterDuree(duree);
+  document.querySelector("#fin-coups").textContent = coups;
+  document.querySelector("#fin-score").textContent = total;
+
+  const ligneRecord = document.querySelector("#fin-record");
+  ligneRecord.hidden = !nouveauRecord;
+  if (nouveauRecord) {
+    ligneRecord.textContent = "Nouveau meilleur score sur ce niveau";
+  }
+
+  panneauFin.hidden = false;
 }
 
 function jouer(index) {
@@ -214,6 +270,7 @@ function nouvellePartie() {
   arreterChrono();
   debut = null;
   affichageChrono.textContent = "00:00";
+  panneauFin.hidden = true;
 
   dessinerPlateau();
   majCompteurs();
@@ -228,6 +285,7 @@ plateau.addEventListener("click", function (evenement) {
 });
 
 boutonNouvelle.addEventListener("click", nouvellePartie);
+boutonRejouer.addEventListener("click", nouvellePartie);
 selectDifficulte.addEventListener("change", nouvellePartie);
 
 document.addEventListener("DOMContentLoaded", nouvellePartie);

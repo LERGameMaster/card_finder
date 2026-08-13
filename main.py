@@ -2,11 +2,27 @@
 
 import board as board_module
 import cards
+import levels
 import scoring
 
-PAIR_COUNT = 8
-COLUMNS = 4
 QUIT_WORDS = {"q", "quit", "exit", "stop"}
+
+
+def ask_level():
+    """Affiche le menu et renvoie le niveau choisi."""
+    print("Choisissez un niveau :")
+    for line in levels.menu():
+        print(line)
+
+    raw = input("Niveau > ").strip()
+    if not raw:
+        return levels.default()
+
+    level = levels.by_key(raw)
+    if level is None:
+        print("Niveau inconnu, on part sur le niveau par defaut.")
+        return levels.default()
+    return level
 
 
 def ask_positions(board):
@@ -49,8 +65,11 @@ def summary(board, score):
 
 
 def play():
-    deck = cards.draw(PAIR_COUNT)
-    board = board_module.Board(deck, COLUMNS)
+    level = ask_level()
+    print("\nNiveau %s : %d paires.\n" % (level["label"], level["pairs"]))
+
+    deck = cards.draw(level["pairs"])
+    board = board_module.Board(deck, level["columns"])
     score = scoring.ScoreBoard()
     score.start()
 

@@ -2,35 +2,37 @@
 
 ## Regles retenues
 
-- Le joueur retourne deux cases par tour, en une seule saisie (`a1 b3`).
-- Une paire trouvee reste visible jusqu'a la fin de la partie, entre crochets.
-- Une paire ratee est immediatement retournee : pas de temporisation, le
-  joueur voit les deux faces dans le rendu qui precede le message.
-- La partie se termine quand toutes les paires sont trouvees, ou quand le
-  joueur tape `q`.
+- Le joueur retourne deux cartes par tour, au clic.
+- Une paire trouvee reste visible jusqu'a la fin de la partie, encadree en
+  vert et desactivee.
+- Une paire ratee se retourne apres 850 ms : assez pour memoriser, assez
+  court pour ne pas casser le rythme.
+- La partie se termine quand toutes les paires sont trouvees ; le panneau de
+  fin recapitule temps, coups et score.
 
 ## Equilibrage
 
-| Niveau    | Paires | Colonnes | Duree cible |
+| Niveau | Paires | Colonnes | Temps cible |
 | --- | --- | --- | --- |
-| Facile    | 6      | 4        | 45 s        |
-| Normal    | 10     | 5        | 90 s        |
-| Difficile | 18     | 6        | 180 s       |
+| Facile | 6 | 4 | 45 s |
+| Normal | 10 | 5 | 90 s |
+| Difficile | 18 | 6 | 180 s |
 
-Le bonus de temps vaut 200 points tant que la partie tient sous 120 secondes,
-puis decroit lineairement jusqu'a zero a 240 secondes. Il faudra sans doute
-indexer cette cible sur le niveau plutot que la garder constante.
+Le bonus de temps vaut 200 points sous le temps cible du niveau, puis
+decroit lineairement jusqu'a zero au double de ce temps. Le temps cible est
+indexe sur le niveau, contrairement a la premiere version ou il etait fixe.
 
-## Rendu console
+## Rendu
 
-- Trois caracteres par carte : au dela, la grille 6 colonnes ne tient plus
-  dans un terminal de 80 colonnes.
-- Les bordures sont partagees entre deux rangees pour gagner en hauteur.
-- Les visuels ASCII vivent dans `assets/` et sont optionnels : le jeu doit
-  rester jouable si seuls les `.py` sont copies dans un executeur en ligne.
+- Le retournement utilise une rotation 3D en CSS (`transform-style:
+  preserve-3d`), sans librairie.
+- Le plateau est une grille CSS dont le nombre de colonnes est pilote par la
+  variable `--colonnes`, remplacee par `--colonnes-mobile` sous 760 px.
+- Les visuels sont des `.webp` d'environ 30 Ko : le jeu se charge vite et
+  fonctionne hors ligne une fois la page ouverte.
 
 ## Pistes
 
-- Sauvegarde du meilleur score par niveau.
+- Apercu de deux secondes en debut de partie.
 - Mode compte a rebours.
-- Affichage du nom complet des cartes deja appariees sous la grille.
+- Tableau des records par niveau affiche sur la page.

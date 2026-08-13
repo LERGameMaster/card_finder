@@ -19,6 +19,12 @@
   padding: 0;
 }
 
+/* Les regles de mise en page ci-dessous declarent un `display`, ce qui
+   annule l'attribut `hidden` de la feuille de style du navigateur. */
+[hidden] {
+  display: none !important;
+}
+
 body {
   background: var(--fond);
   color: var(--texte);

@@ -8,6 +8,9 @@ import os
 
 ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 
+# Planches d'origine et exports haute definition (a ne pas versionner) :
+# https://drive.google.com/drive/folders/1UGRKe1vHigEeVc4u8z3taczs6cUo8Jkn?usp=drive_link
+
 FALLBACK_TITLE = "CARD FINDER"
 FALLBACK_BACK = "+-----+\n| ??? |\n+-----+"
 

@@ -2,6 +2,7 @@
 
 import board as board_module
 import cards
+import scoring
 
 PAIR_COUNT = 8
 COLUMNS = 4
@@ -28,18 +29,41 @@ def ask_positions(board):
     return first, second
 
 
+def status_line(board, score):
+    return "Paires restantes : %d   |   Chrono : %s   |   Score : %d" % (
+        board.pairs_left,
+        scoring.format_duration(score.elapsed),
+        score.total(),
+    )
+
+
+def summary(board, score):
+    print("")
+    print("=" * 44)
+    print("Duree      : %s" % scoring.format_duration(score.elapsed))
+    print("Coups      : %d (%d reussis, %d rates)" % (score.turns, score.matches, score.misses))
+    print("Precision  : %.0f%%" % score.accuracy)
+    print("Bonus temps: %d" % score.time_bonus())
+    print("Score final: %d" % score.total())
+    print("=" * 44)
+
+
 def play():
     deck = cards.draw(PAIR_COUNT)
     board = board_module.Board(deck, COLUMNS)
+    score = scoring.ScoreBoard()
+    score.start()
 
     while not board.is_complete():
         print("")
         print(board.render())
-        print("Paires restantes : %d\n" % board.pairs_left)
+        print(status_line(board, score) + "\n")
 
         positions = ask_positions(board)
         if positions is None:
+            score.stop()
             print("Partie abandonnee.")
+            summary(board, score)
             return
 
         first, second = positions
@@ -49,13 +73,17 @@ def play():
         print(board.render())
 
         if board.resolve(first, second):
+            score.register_match()
             print("\nPaire trouvee : %s" % board.cards[first].name)
         else:
+            score.register_miss()
             print("\nRate, les cartes sont retournees.")
 
+    score.stop()
     print("")
     print(board.render())
     print("\nToutes les paires sont trouvees, bravo !")
+    summary(board, score)
 
 
 if __name__ == "__main__":

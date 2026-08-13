@@ -187,8 +187,9 @@ img {
 }
 
 .case {
+  display: block;
   position: relative;
-  aspect-ratio: 0.72;
+  width: 100%;
   border: none;
   background: none;
   padding: 0;
@@ -196,10 +197,14 @@ img {
   perspective: 900px;
 }
 
+/* Le ratio est porte par l'interieur, pas par le bouton : les deux faces
+   sont en position absolue, donc rien ne donne sa hauteur au bouton si son
+   propre aspect-ratio n'est pas pris en compte. */
 .case__interieur {
+  display: block;
   position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 0.72;
   transform-style: preserve-3d;
   transition: transform 0.45s ease;
 }
@@ -243,8 +248,11 @@ img {
   box-shadow: 0 0 0 2px rgba(63, 209, 138, 0.35);
 }
 
-.case--trouvee .case__interieur {
-  opacity: 0.72;
+/* L'attenuation porte sur la face avant et pas sur .case__interieur :
+   l'opacite est une propriete de groupement, elle repasserait le conteneur
+   en transform-style: flat et le dos de carte reapparaitrait en miroir. */
+.case--trouvee .case__face--avant {
+  opacity: 0.75;
 }
 
 .case:disabled {

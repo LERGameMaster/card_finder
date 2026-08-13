@@ -1,11 +1,21 @@
 """Card Finder - jeu de memoire en console."""
 
+import art
 import board as board_module
 import cards
 import levels
 import scoring
 
 QUIT_WORDS = {"q", "quit", "exit", "stop"}
+
+
+def intro():
+    print(art.title())
+    print("")
+    print("Retrouvez toutes les paires. Les cartes face cachee ressemblent a ca :")
+    print("")
+    print(art.card_back())
+    print("")
 
 
 def ask_level():
@@ -65,6 +75,7 @@ def summary(board, score):
 
 
 def play():
+    intro()
     level = ask_level()
     print("\nNiveau %s : %d paires.\n" % (level["label"], level["pairs"]))
 
